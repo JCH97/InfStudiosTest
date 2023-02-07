@@ -17,7 +17,7 @@ type UserProps = {
     updatedAt: Date;
 };
 
-export type NewUserProps = Omit<UserProps, '_id' | 'createdAt' | 'updatedAt'> & {
+export type NewUserProps = Omit<UserProps, '_id' | 'createdAt' | 'updatedAt' | 'password'> & {
     password: string;
 }
 
@@ -59,7 +59,7 @@ export class User extends Domain<UserProps> {
     ): Promise<Result<User>> {
 
         let password = await UserPassword.createFromPlain({value: props.password});
-        if (!password)
+        if (!password.isSuccess)
             return Result.Fail<User>(password.error);
 
         return this.create({
@@ -75,6 +75,10 @@ export class User extends Domain<UserProps> {
         return Result.Ok(u);
     }
 
+    updateRol() {
+        this.props.rol = UserRol.ADMIN;
+    }
+
     async getUserToken(
         plainPass: string,
         secret: string,
@@ -83,6 +87,7 @@ export class User extends Domain<UserProps> {
 
         const jwtClaims: JWTClaims = {
             _id: this.props._id,
+            email: this.props.email,
             role: this.props.rol
         };
 
