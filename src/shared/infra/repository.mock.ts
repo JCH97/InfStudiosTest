@@ -1,5 +1,5 @@
-import { IRepository } from '../interfaces/IRepository';
 import { MockType } from '../mocks/mock-type';
+import {IRepository} from "../domain/interfaces/IRepository";
 
 export const RepositoryMock: <T>() => MockType<IRepository<T>> = jest.fn(
   () => ({
