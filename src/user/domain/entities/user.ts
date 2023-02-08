@@ -1,10 +1,7 @@
 import {UserRol} from "../enums/user.rol";
 import {Domain} from "../../../shared/domain/domain.abstract";
 import {Result} from "../../../shared/domain/result";
-import * as jwt from 'jsonwebtoken';
 import {UserPassword} from "../value-objects/user.password";
-import {JWTClaims, JWTToken} from "../value-objects/token.value-object";
-import {AppError} from "../../../shared/domain/errors/app.error";
 
 type UserProps = {
     _id?: string;
@@ -77,29 +74,6 @@ export class User extends Domain<UserProps> {
 
     updateRol() {
         this.props.rol = UserRol.ADMIN;
-    }
-
-    async getUserToken(
-        plainPass: string,
-        secret: string,
-        expiresIn: string
-    ): Promise<Result<JWTToken, AppError.ValidationError>> {
-
-        const jwtClaims: JWTClaims = {
-            _id: this.props._id,
-            email: this.props.email,
-            role: this.props.rol
-        };
-
-        const token = await jwt.sign(
-            jwtClaims,
-            secret,
-            {
-                expiresIn
-            },
-        );
-
-        return Result.Ok(token);
     }
 }
 

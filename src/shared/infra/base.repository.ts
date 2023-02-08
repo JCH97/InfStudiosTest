@@ -103,6 +103,7 @@ export class BaseRepository<T extends PersistEntity> implements IRepository<T> {
 
     async create(item: T | any): Promise<T> {
         this._logger.log(`Create. Data: ${JSON.stringify(item)}`);
+        delete item._id;
         return await this.model.create(item);
     }
 

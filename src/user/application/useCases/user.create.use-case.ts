@@ -37,10 +37,10 @@ export class UserCreateUseCase implements IUseCase<NewUserProps, UserCreateUseCa
 
         await this
             .userRepository
-            .create(UserMapper.DomainToPersist(user.getValue()));
+            .create(UserMapper.DomainToPersist(user.unwrap()));
 
 
-        return right(Result.Ok(user.getValue()));
+        return right(Result.Ok(user.unwrap()));
     }
 
     async onModuleInit() {
